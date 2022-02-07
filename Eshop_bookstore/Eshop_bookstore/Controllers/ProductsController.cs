@@ -25,8 +25,9 @@ namespace Eshop_Bookstore.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchBy, string search, string filter)
         {
+            //  Start: Kiểm tra user xem đã đăng nhập chưa
             var username = HttpContext.Session.GetString("username");
             var password = HttpContext.Session.GetString("password");
             if (username != null)
@@ -38,9 +39,43 @@ namespace Eshop_Bookstore.Controllers
             {
                 ViewBag.UserLogin = null;
             }
+            //  End: Kiểm tra user xem đã đăng nhập chưa
 
-            var eshop_BookstoreContext = _context.Products.Include(p => p.ProductType);
+            //  Start: Lấy DS Loại SP
             ViewBag.LstProductTypes = await _context.ProductTypes.ToListAsync();
+            //  End: Lấy DS Loại SP
+
+            //  Start: Tìm theo giá tiền
+            if (filter != null)
+            {
+                int price = Convert.ToInt32(filter.Substring(4));
+                var data = await _context.Products.Where(p => p.Price <= price).ToListAsync();
+                return View(data);
+            }
+            //  End: Tìm theo giá tiền
+
+            //  Start: Xử lý tìm kiếm
+            if (searchBy != null && search != null)
+            {
+                if(searchBy == "Name")
+                {
+                    var data = await _context.Products.Where(p => p.Name.Contains(search)).ToListAsync();
+                    return View(data);
+                }
+                else if(searchBy == "Description")
+                {
+                    var data = await _context.Products.Where(p => p.Decription.Contains(search)).ToListAsync();
+                    return View(data);
+                }               
+                else if (searchBy == "ProductType")
+                {
+                    var data = await _context.Products.Where(p => p.ProductType.Name.Contains(search)).ToListAsync();
+                    return View(data);
+                }
+            }
+            //  End: Xử lý tìm kiếm
+            
+            var eshop_BookstoreContext = _context.Products.Include(p => p.ProductType);
             return View(await eshop_BookstoreContext.ToListAsync());
         }
 

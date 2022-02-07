@@ -45,12 +45,11 @@
                             }
                             </div>
                         <div class="widget_list widget_filter">
-                            <h3>Filter by price</h3>
-                            <form action="#">
+                            <h3>Tìm theo giá</h3>
+                            <form asp-action="Index" asp-controller="Products" method="get">
                                 <div id="slider-range"></div>
-                                <button type="submit">Filter</button>
-                                <input type="text" name="text" id="amount" />
-
+                                <button type="submit">Tìm</button>
+                                <input type="text" name="filter" id="amount" />
                             </form>
                         </div>
                        
@@ -73,35 +72,44 @@
                         <button data-role="grid_list" type="button" class="btn-list" data-bs-toggle="tooltip"
                                 title="List"></button>
                     </div>
-                    <div class=" niceselect_option">
-                        <form class="select_option" action="#">
-                            <select name="orderby" id="short">
 
-                                <option selected value="1">Sort by average rating</option>
-                                <option value="2">Sort by popularity</option>
-                                <option value="3">Sort by newness</option>
-                                <option value="4">Sort by price: low to high</option>
-                                <option value="5">Sort by price: high to low</option>
-                                <option value="6">Product Name: Z</option>
-                            </select>
-                        </form>
-                    </div>
+                    @using (Html.BeginForm("Index", "Products", FormMethod.Get))
+                    {
+                        <strong>Tìm kiếm: </strong>
+                        @Html.RadioButton("searchBy", "Name") <span>Tên sản phẩm</span>
+                        @Html.RadioButton("searchBy", "Description") <span>Mô tả</span>
+                        @Html.RadioButton("searchBy", "ProductType") <span> Loại sách</span>
+                        @Html.TextBox("search", "", new { @class = "form-control" })
+                        
+                        <input type="submit" value="Search" class="btn btn-outline-primary" />
+                    }
+
                     <div class="page_amount">
-                        <p>Showing 1–9 of 21 results</p>
+                        <p>@*Showing 1–9 of 21 results*@</p>
                     </div>
                 </div>
                 <!--shop toolbar end-->
                 <div class="row shop_wrapper">
+                    @if (Model.Count() == 0)
+                    {
+                        <tr>
+                            <td colspan="4">
+                                <h1 style="color: red;">Không tìm thấy sản phẩm !</h1>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
                     @foreach (var item in Model)
                     {
                     <div class="col-lg-4 col-md-4 col-12 ">
                         <article class="single_product">
                             <figure>
                                 <div class="product_thumb">
-                                    <a class="primary_img" href="product-details.html">
-                                        <img src="~/EshopView/assets/img/product/@Html.DisplayFor(modelItem=>item.Image)" alt="">
+                                    <a class="primary_img" asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">
+                                        <img src="~/EshopView/assets/img/product/@Html.DisplayFor(modelItem => item.Image)" alt="">
                                     </a>
-                                    <div class="action_links">
+                                    <div class="action_links">  
                                         <ul>
                                             <li class="add_to_cart">
                                                 <a href="cart.html" title="Add to cart">
@@ -133,16 +141,16 @@
                                         </div>
                                         <h4 class="product_name">
                                             <a href="product-details.html">
-                                                @Html.DisplayFor(modelItem=>item.Name)
+                                                @Html.DisplayFor(modelItem => item.Name)
                                             </a>
                                         </h4>
-                                        @*<h6 class="price_box">
+                                        <h6 class="price_box">
                                             <a href="product-details.html">
-                                                @Html.DisplayFor(modelItem=>item.Actor)
+                                                @Html.DisplayFor(modelItem => item.Actor)
                                             </a>
-                                        </h6>*@
+                                        </h6>
                                         <div class="price_box">
-                                            <span class="current_price">@Html.DisplayFor(modelItem=>item.Price)</span>
+                                            <span class="current_price">@Html.DisplayFor(modelItem => item.Price)</span>
                                         </div>
                                     </div>
                                 </div>
@@ -196,9 +204,10 @@
                         </article>
                     </div>
                     }
+                    }
                 </div>
 
-                <div class="shop_toolbar t_bottom">
+                @*<div class="shop_toolbar t_bottom">
                     <div class="pagination">
                         <ul>
                             <li class="current">1</li>
@@ -208,7 +217,7 @@
                             <li><a href="#">>></a></li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
                 <!--shop toolbar end-->
                 <!--shop wrapper end-->
             </div>

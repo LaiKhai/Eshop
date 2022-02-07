@@ -35,20 +35,24 @@
                 <li class="nav-item profile">
                     <div class="profile-desc">
                         <div class="profile-pic">
+                            @if (ViewBag.UserLogin != null)
+                            {
+                                var user = ViewBag.UserLogin;
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle " src="~/EshopView/assets/img/account/admin.jpg" alt="">
+                                <img class="img-xs rounded-circle " src="~/EshopView/assets/img/account/@user.Avatar" alt="">
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
-                                <h5 class="mb-0 font-weight-normal">Henry Klein</h5>
+                                <h5 class="mb-0 font-weight-normal">@user.Username</h5>
                                 <span>Gold Member</span>
                             </div>
+                            }
                         </div>
                         <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
                         <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
                             <a href="#" class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-dark rounded-circle">
+                                    <div class="preview-icon bg-dark rounded-circle"
                                         <i class="mdi mdi-settings text-primary"></i>
                                     </div>
                                 </div>
@@ -300,9 +304,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                                 <div class="navbar-profile">
-                                    <img class="img-xs rounded-circle" src="~/EshopView/assets/img/account/admin.jpg" alt="">
-                                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Admin</p>
-                                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                                    <p class="mb-0 d-none d-sm-block navbar-profile-name"> <a asp-area="Default" asp-controller="Home" asp-action="Logout" >Đăng xuất</a></p>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
