@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Eshop_Bookstore.Data;
 using Eshop_Bookstore.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Eshop_Bookstore.Areas.Admin.Controllers
 {
@@ -23,12 +24,36 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Invoices
         public async Task<IActionResult> Index()
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             return View(await _context.Invoices.ToListAsync());
         }
 
         // GET: Admin/Invoices/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -45,8 +70,20 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         }
 
         // GET: Admin/Invoices/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             return View();
         }
 
@@ -57,6 +94,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Code,AccoutId,IssueDate,ShippingAddress,ShippingPhone,Total,Status")] Invoice invoice)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(invoice);
@@ -69,6 +118,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Invoices/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -89,6 +150,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Code,AccoutId,IssueDate,ShippingAddress,ShippingPhone,Total,Status")] Invoice invoice)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id != invoice.Id)
             {
                 return NotFound();
@@ -120,6 +193,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Invoices/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id == null)
             {
                 return NotFound();

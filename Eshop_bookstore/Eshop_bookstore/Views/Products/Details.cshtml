@@ -4,63 +4,122 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@*<h1>Details</h1>
 
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SKU)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SKU)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Decription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Decription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductType.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <h4>Product</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.SKU)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.SKU)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Actor)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Actor)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Decription)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Decription)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stock)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stock)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProductType)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProductType.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Image)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Image)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+<div class="product_details mt-100 mb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="product-details-tab">
+                    <div id="img-1" class="zoomWrapper single-zoom" style="border:none">
+                        <a href="#">
+                            <img id="zoom1" src="~/EshopView/assets/img/product/@Model.Image"
+                                 data-zoom-image="~/EshopView/assets/img/product/@Model.Image" alt="big-1">
+                        </a>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product_d_right">
+                    <form action="#">
+
+                        <h1>@Model.Name</h1>
+                       
+                        <div class=" product_ratting">
+                            <ul>
+                                <li class="review">Tác giả: @Model.Actor</li>
+                            </ul>
+
+                        </div>
+                        <div class="price_box">
+                            <span class="current_price">Giá: @Model.Price</span>
+
+                        </div>
+                        <div class="product_desc">
+                            <p>
+                                @Model.Decription
+                            </p>
+                        </div>
+                       
+                        <div class="product_variant quantity">
+                            <label>Số lượng</label>
+                            <input min="1" max="100" value="1" type="number">
+                            <button class="button" type="submit">thêm vào giỏ hàng</button>
+
+                        </div>
+                        <div class="product_meta">
+                            <span>Loại sách: <a asp-controller="ProductTypes" asp-action="Details" asp-route-id="@Model.ProductTypeId">@Model.ProductType.Name</a></span>
+                        </div>
+
+                    </form>                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
