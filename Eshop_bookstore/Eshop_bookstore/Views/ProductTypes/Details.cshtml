@@ -44,7 +44,7 @@
                                 </ul>
                             }
                         </div>
-                        <div class="widget_list widget_filter">
+                        @*<div class="widget_list widget_filter">
                             <h3>Filter by price</h3>
                             <form action="#">
                                 <div id="slider-range"></div>
@@ -52,7 +52,7 @@
                                 <input type="text" name="text" id="amount" />
 
                             </form>
-                        </div>
+                        </div>*@
 
                     </div>
                 </aside>
@@ -73,7 +73,7 @@
                         <button data-role="grid_list" type="button" class="btn-list" data-bs-toggle="tooltip"
                                 title="List"></button>
                     </div>
-                    <div class=" niceselect_option">
+                    @*<div class=" niceselect_option">
                         <form class="select_option" action="#">
                             <select name="orderby" id="short">
 
@@ -88,7 +88,7 @@
                     </div>
                     <div class="page_amount">
                         <p>Showing 1–9 of 21 results</p>
-                    </div>
+                    </div>*@
                 </div>
                 <!--shop toolbar end-->
                 <div class="row shop_wrapper">
@@ -98,7 +98,7 @@
                             <article class="single_product">
                                 <figure>
                                     <div class="product_thumb">
-                                        <a class="primary_img" href="product-details.html">
+                                        <a class="primary_img" asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">
                                             <img src="~/EshopView/assets/img/product/@item.Image" alt="">
                                         </a>
                                         <div class="action_links">
@@ -136,11 +136,11 @@
                                                     @item.Name
                                                 </a>
                                             </h4>
-                                            @*<h6 class="price_box">
+                                            <h6 class="price_box">
                                                 <a href="product-details.html">
                                                     @item.Actor
                                                 </a>
-                                            </h6>*@
+                                            </h6>
                                             <div class="price_box">
                                                 <span class="current_price">@item.Price</span>
                                             </div>
@@ -198,7 +198,7 @@
                     }
                 </div>
 
-                <div class="shop_toolbar t_bottom">
+                @*<div class="shop_toolbar t_bottom">
                     <div class="pagination">
                         <ul>
                             <li class="current">1</li>
@@ -208,7 +208,7 @@
                             <li><a href="#">>></a></li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
                 <!--shop toolbar end-->
                 <!--shop wrapper end-->
             </div>
