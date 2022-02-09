@@ -90,12 +90,14 @@ namespace Eshop_Bookstore.Controllers
                 {
                     HttpContext.Session.SetString("username", user.Username);
                     HttpContext.Session.SetString("password", user.Password);
+                    HttpContext.Session.SetString("IdAccount", user.Id.ToString());
                     return RedirectToAction("Home", "Admin");
                 }
                 else
                 {
                     HttpContext.Session.SetString("username", user.Username);
                     HttpContext.Session.SetString("password", user.Password);
+                    HttpContext.Session.SetString("IdAccount", user.Id.ToString());
                     return RedirectToAction("Index");
                 }
             }

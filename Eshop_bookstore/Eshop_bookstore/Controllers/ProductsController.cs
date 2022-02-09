@@ -82,6 +82,20 @@ namespace Eshop_Bookstore.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //  Start: Kiểm tra user xem đã đăng nhập chưa
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+            //  End: Kiểm tra user xem đã đăng nhập chưa
+
             if (id == null)
             {
                 return NotFound();

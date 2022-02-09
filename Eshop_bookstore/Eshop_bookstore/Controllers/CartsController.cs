@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Eshop_Bookstore.Data;
 using Eshop_Bookstore.Models;
+using Eshop_Bookstore.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace Eshop_Bookstore.Controllers
 {
@@ -18,14 +20,112 @@ namespace Eshop_Bookstore.Controllers
         {
             _context = context;
         }
+        //Tạo danh sách Giỏ Hàng
 
-        // GET: Carts
-        public async Task<IActionResult> Index()
+        public List<Cart> Carts
         {
-            var eshop_BookstoreContext = _context.Carts.Include(c => c.Account).Include(c => c.Product);
-            return View(await eshop_BookstoreContext.ToListAsync());
+            get
+            {
+                var data = HttpContext.Session.Get<List<Cart>>("GioHang");
+                if (data == null)
+                {
+                    data = new List<Cart>();
+                }
+                
+                return data;
+            }
         }
 
+        //End - Tạo danh sách giỏ hàng
+
+        //Kiểm tra giỏ hàng
+        public async Task<bool> CheckCart()
+        {
+            //  Start: Kiểm tra user xem đã đăng nhập chưa
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var id = HttpContext.Session.GetString("IdAccount");
+                // lấy danh sách sản phẩm của tài khoản
+                var cart = await _context.Carts
+                .Include(c => c.Account)
+                .Include(c => c.Product)
+                .FirstOrDefaultAsync(m => m.Id == Int32.Parse(id));
+                //end - lấy danh sách sản phẩm của tài khoản
+                if (cart == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //End - Kiêm tra giỏ hàng
+        //Thêm giỏ hàng
+        public async Task<IActionResult> AddToCart(int id,int quantity)
+        {
+            var idAccount = HttpContext.Session.GetString("IdAccount");
+            if (idAccount == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                    //var myCart = Carts;
+                    var item = _context.Carts.SingleOrDefault(p => p.ProductId == id);
+                    if (item == null)
+                    {
+                        var product = _context.Products.SingleOrDefault(p => p.Id == id);
+                        
+                        item = new Cart
+                        {
+                            AccountId = Int32.Parse(idAccount)+1,
+                            ProductId = id,
+                            Product = product,
+                            Quantity = quantity
+                        };
+                        //myCart.Add(item);
+                    _context.Add(item);
+                }
+                    else
+                    {
+                        item.Quantity += quantity;
+                    }
+                    //HttpContext.Session.Set("GioHang", myCart);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index","Cart");
+            }
+                    
+        }
+        //End - Thêm giỏ hàng
+        // GET: Carts
+        public async Task<IActionResult> Index(int? id)
+        {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+                var cart = await _context.Carts.Include(c=>c.Product)
+                .Where(m => m.AccountId == id).ToListAsync();
+                return View(cart);
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+            //  End: Kiểm tra user xem đã đăng nhập chưa
+            return RedirectToAction("Login", "Home");
+        }
+        
         // GET: Carts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
