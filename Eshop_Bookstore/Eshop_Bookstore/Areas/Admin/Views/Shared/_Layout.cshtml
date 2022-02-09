@@ -120,7 +120,7 @@
                         <span class="menu-title">Quản lí hóa đơn</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+ @*               <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
                         <span class="menu-icon">
                             <i class="mdi mdi-security"></i>
@@ -137,13 +137,13 @@
                             <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html"> Register </a></li>
                         </ul>
                     </div>
-                </li>
+                </li>*@
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="https://localhost:44330/Admin/Accounts/Index">
+                    <a class="nav-link" asp-controller="InvoiceDetails" asp-action="Index">
                         <span class="menu-icon">
                             <i class="mdi mdi-file-document-box"></i>
                         </span>
-                        <span class="menu-title">Documentation</span>
+                        <span class="menu-title">Quản lý chi tiết hoá đơn</span>
                     </a>
                 </li>
             </ul>
@@ -303,8 +303,8 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
-                                <div class="navbar-profile">
-                                    <p class="mb-0 d-none d-sm-block navbar-profile-name"> <a asp-area="Default" asp-controller="Home" asp-action="Logout" >Đăng xuất</a></p>
+                                <div style=" margin-top:-40px;" class="navbar-profile">
+                                    <p class="mb-0 d-none d-sm-block navbar-profile-name"> <a class="btn btn-primary" asp-area="Default" asp-controller="Home" asp-action="Logout" role="button">Đăng xuất</a></p>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
