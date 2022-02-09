@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Eshop_Bookstore.Data;
 using Eshop_Bookstore.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Eshop_Bookstore.Controllers
 {
@@ -32,9 +33,25 @@ namespace Eshop_Bookstore.Controllers
             {
                 return NotFound();
             }
+            //  Start: Kiểm tra user xem đã đăng nhập chưa
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+            //  End: Kiểm tra user xem đã đăng nhập chưa
 
             var productType = await _context.ProductTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
+            ViewBag.lstProduct = await _context.Products.Where(p => p.ProductTypeId == id).ToListAsync();
+            ViewBag.lstProductTypes = await _context.ProductTypes.ToArrayAsync();
+
             if (productType == null)
             {
                 return NotFound();

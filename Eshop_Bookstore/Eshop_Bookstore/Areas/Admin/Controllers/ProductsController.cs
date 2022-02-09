@@ -9,6 +9,7 @@ using Eshop_Bookstore.Data;
 using Eshop_Bookstore.Models;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace Eshop_Bookstore.Areas.Admin.Controllers
 {
@@ -26,6 +27,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Products
         public async Task<IActionResult> Index()
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             var eshop_BookstoreContext = _context.Products.Include(p => p.ProductType);
             return View(await eshop_BookstoreContext.ToListAsync());
         }
@@ -33,6 +46,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -50,8 +75,20 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Name");
             return View();
         }
@@ -63,6 +100,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SKU,Name,Decription,Price,Stock,ProductTypeId,ImageFile,Status")] Product product)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
@@ -93,6 +142,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -114,6 +175,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,SKU,Name,Decription,Price,Stock,ProductTypeId,Image,ImageFile,Status")] Product product)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id != product.Id)
             {
                 return NotFound();
@@ -168,6 +241,18 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
         // GET: Admin/Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                ViewBag.UserLogin = userLogin;
+            }
+            else
+            {
+                ViewBag.UserLogin = null;
+            }
+
             if (id == null)
             {
                 return NotFound();

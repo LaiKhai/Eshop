@@ -64,6 +64,7 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(account);
+                /*
                 if (account.Avatar != null)
                 {
                     var fileName = account.Id.ToString() + Path.GetExtension(account.Avatar.FileName);
@@ -79,6 +80,7 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
                     await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));
+                */
             }
             return View(account);
         }
