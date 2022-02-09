@@ -64,11 +64,10 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(account);
-                await _context.SaveChangesAsync();
-                if(account.Avatar != null)
+                if (account.Avatar != null)
                 {
                     var fileName = account.Id.ToString() + Path.GetExtension(account.Avatar.FileName);
-                    var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "account");
+                    var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "product");
                     var filePath = Path.Combine(uploadPath, fileName);
                     using (FileStream fs = System.IO.File.Create(filePath))
                     {
@@ -77,6 +76,7 @@ namespace Eshop_Bookstore.Areas.Admin.Controllers
                     }
                     account.Avatar = fileName;
                     _context.Update(account);
+                    await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));
             }
