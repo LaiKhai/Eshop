@@ -30,6 +30,7 @@ namespace Eshop_Bookstore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddMvc();
 
             services.AddDbContext<Eshop_BookstoreContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Eshop_BookstoreContext")));

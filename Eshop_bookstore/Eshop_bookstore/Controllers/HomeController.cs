@@ -41,6 +41,8 @@ namespace Eshop_Bookstore.Controllers
                 ViewBag.UserLogin = null;
             }
 
+            ViewBag.lstProducts = await _context.Products.ToListAsync();
+
             return View();
         }
 
