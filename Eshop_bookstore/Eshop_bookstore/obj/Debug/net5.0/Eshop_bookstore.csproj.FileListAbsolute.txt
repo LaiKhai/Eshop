@@ -430,3 +430,4 @@ D:\HocTap\HKIV\KiemThuPhanMem\Eshop\Eshop_Bookstore\Eshop_Bookstore\obj\Debug\ne
 D:\HocTap\HKIV\KiemThuPhanMem\Eshop\Eshop_Bookstore\Eshop_Bookstore\obj\Debug\net5.0\Razor\Views\Home\Register.cshtml.g.cs
 D:\DoAnKTPM\Eshop\Eshop_Bookstore\Eshop_Bookstore\obj\Debug\net5.0\Razor\Views\Login\Index.cshtml.g.cs
 D:\HocTap\HKIV\KiemThuPhanMem\Eshop\Eshop_Bookstore\Eshop_Bookstore\obj\Debug\net5.0\Razor\Views\Login\Index.cshtml.g.cs
+D:\HocTap\HKIV\KiemThuPhanMem\Eshop\Eshop_Bookstore\Eshop_Bookstore\obj\Debug\net5.0\Razor\Views\Carts\Pay.cshtml.g.cs

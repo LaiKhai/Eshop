@@ -20,111 +20,57 @@ namespace Eshop_Bookstore.Controllers
         {
             _context = context;
         }
-        //Tạo danh sách Giỏ Hàng
 
-        public List<Cart> Carts
-        {
-            get
-            {
-                var data = HttpContext.Session.Get<List<Cart>>("GioHang");
-                if (data == null)
-                {
-                    data = new List<Cart>();
-                }
-                
-                return data;
-            }
-        }
-
-        //End - Tạo danh sách giỏ hàng
-
-        //Kiểm tra giỏ hàng
-        public async Task<bool> CheckCart()
-        {
-            //  Start: Kiểm tra user xem đã đăng nhập chưa
-            var username = HttpContext.Session.GetString("username");
-            var password = HttpContext.Session.GetString("password");
-            if (username != null)
-            {
-                var id = HttpContext.Session.GetString("IdAccount");
-                // lấy danh sách sản phẩm của tài khoản
-                var cart = await _context.Carts
-                .Include(c => c.Account)
-                .Include(c => c.Product)
-                .FirstOrDefaultAsync(m => m.Id == Int32.Parse(id));
-                //end - lấy danh sách sản phẩm của tài khoản
-                if (cart == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        //End - Kiêm tra giỏ hàng
         //Thêm giỏ hàng
-        public async Task<IActionResult> AddToCart(int id,int quantity)
+        public async Task<IActionResult> AddToCart(int id, int quantity)
         {
-            var idAccount = HttpContext.Session.GetString("IdAccount");
-            if (idAccount == null)
+            Cart giohang = _context.Carts.FirstOrDefault(gh => gh.ProductId == id);
+            if (giohang == null)
             {
-                return RedirectToAction("Index", "Home");
+                int UserId = (int)HttpContext.Session.GetInt32("UserID");
+                giohang = new Cart()
+                {
+                    AccountId = UserId,
+                    ProductId = id,
+                    Quantity = quantity
+                };
+                _context.Carts.Add(giohang);
+                await _context.SaveChangesAsync();
             }
             else
             {
-                    //var myCart = Carts;
-                    var item = _context.Carts.SingleOrDefault(p => p.ProductId == id);
-                    if (item == null)
-                    {
-                        var product = _context.Products.SingleOrDefault(p => p.Id == id);
-                        
-                        item = new Cart
-                        {
-                            AccountId = Int32.Parse(idAccount)+1,
-                            ProductId = id,
-                            Product = product,
-                            Quantity = quantity
-                        };
-                        //myCart.Add(item);
-                    _context.Add(item);
-                }
-                    else
-                    {
-                        item.Quantity += quantity;
-                    }
-                    //HttpContext.Session.Set("GioHang", myCart);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index","Cart");
+                giohang.Quantity += quantity;
+                await _context.SaveChangesAsync();
             }
-                    
+            return RedirectToAction("Index");
         }
+
+    
         //End - Thêm giỏ hàng
         // GET: Carts
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index()
         {
+
+        // Start: Kiểm tra user xem đã đăng nhập chưa
             var username = HttpContext.Session.GetString("username");
             var password = HttpContext.Session.GetString("password");
             if (username != null)
             {
                 var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
                 ViewBag.UserLogin = userLogin;
-                var cart = await _context.Carts.Include(c=>c.Product)
-                .Where(m => m.AccountId == id).ToListAsync();
-                return View(cart);
+                ViewData["Total"] = _context.Carts.Sum(p => p.Quantity * p.Product.Price);
+                int UserId = (int)HttpContext.Session.GetInt32("UserID");
+                var sp = _context.Carts.Include(p => p.Product).Include(u => u.Account).Where(i => i.AccountId == UserId);
+                return View(await sp.ToListAsync());
             }
             else
             {
                 ViewBag.UserLogin = null;
+                return RedirectToAction("Login", "Home");
             }
             //  End: Kiểm tra user xem đã đăng nhập chưa
-            return RedirectToAction("Login", "Home");
-        }
+            
+    }
         
         // GET: Carts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -243,17 +189,34 @@ namespace Eshop_Bookstore.Controllers
             {
                 return NotFound();
             }
-
-            return View(cart);
+            var gioHang = await _context.Carts.FindAsync(id);
+            _context.Carts.Remove(gioHang);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // POST: Carts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> UpdateToCart(int? id, int soluong)
         {
-            var cart = await _context.Carts.FindAsync(id);
-            _context.Carts.Remove(cart);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.Carts.FirstOrDefaultAsync(p => p.ProductId == id);
+            if (soluong > 0)
+            {
+                sp.Quantity = soluong;
+                _context.Update(sp);
+            }
+            else if (soluong < 0)
+            {
+                sp.Quantity = 1;
+                _context.Update(sp);
+            }
+            else if (soluong == 0)
+            {
+                _context.Remove(sp);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -261,6 +224,98 @@ namespace Eshop_Bookstore.Controllers
         private bool CartExists(int id)
         {
             return _context.Carts.Any(e => e.Id == id);
+        }
+        public IActionResult Pay()
+        {
+            // Start: Kiểm tra user xem đã đăng nhập chưa
+            var username = HttpContext.Session.GetString("username");
+            var password = HttpContext.Session.GetString("password");
+            if (username != null)
+            {
+                ViewData["Account"] = _context.Accounts.Where(a => a.Username == username).FirstOrDefault();
+                int UserId = (int)HttpContext.Session.GetInt32("UserID");
+                ViewData["Total"] = _context.Carts.Include(p => p.Product).Include(a => a.Account).Where(s => s.Account.Username == username).Sum(p => p.Quantity * p.Product.Price);
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            //  End: Kiểm tra user xem đã đăng nhập chưa
+            
+        }
+        [HttpPost]
+        public IActionResult Pay([Bind("ShippingAddress,ShippingPhone")] Invoice inv)
+        {
+            var username = HttpContext.Session.GetString("username");
+            if (!checkCart(username))
+            {
+                ViewBag.ErrorMessage = "Có sản phẩm đã hết hàng. Vui lòng kiểm tra !";
+                return View();
+            }
+            //Thêm hóa đơn
+            DateTime now = DateTime.Now;
+            inv.Code = now.ToString("yyMMddhhmmss");
+            inv.AccoutId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
+            inv.IssueDate = now;
+            inv.Total = _context.Carts.Include(p => p.Product).Include(a => a.Account).Where(s => s.Account.Username == username).Sum(p => p.Quantity * p.Product.Price);
+            _context.Add(inv);
+            _context.SaveChanges();
+            //Thêm chi tiết hóa đơn
+            List<Cart> cart = _context.Carts.Include(p => p.Product).Include(a => a.Account).Where(m => m.Account.Username == username).ToList();
+            foreach(Cart c in cart)
+            {
+                InvoiceDetail invD = new InvoiceDetail();
+                invD.InvoiceId = inv.Id;
+                invD.ProductId = c.ProductId;
+                invD.Quantity = c.Quantity;
+                invD.UnitPrice = c.Product.Price;
+                _context.Add(invD);
+            }
+            _context.SaveChanges();
+            //Trừ số lượng tồn kho
+            foreach(Cart c in cart)
+            {
+                c.Product.Stock -= c.Quantity;
+                _context.Remove(c);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
+
+        private bool checkCart(string us)
+        {
+            List<Cart> cart = _context.Carts.Include(p => p.Product).Include(a => a.Account).Where(m => m.Account.Username == us).ToList();
+            foreach(Cart c in cart)
+            {
+                if(c.Product.Stock < c.Quantity)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        [HttpPost, ActionName("UpdateToCart")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateToCart(int id, int soluong)
+        {
+            var sp = await _context.Carts.FirstOrDefaultAsync(p => p.ProductId == id);
+            if (soluong > 0)
+            {
+                sp.Quantity = soluong;
+                _context.Update(sp);
+            }
+            else if (soluong < 0)
+            {
+                sp.Quantity = 1;
+                _context.Update(sp);
+            }
+            else if (soluong == 0)
+            {
+                _context.Remove(sp);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

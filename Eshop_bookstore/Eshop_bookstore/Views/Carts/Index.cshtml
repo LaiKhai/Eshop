@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    bool instock = true;
 }
 <div class="breadcrumbs_area">
     <div class="container">
@@ -20,85 +21,88 @@
 </div>
 <div class="shopping_cart_area mt-100">
     <div class="container">
-        <form action="#">
             <div class="row">
                 <div class="col-12">
                     <div class="table_desc">
                         <div class="cart_page table-responsive">
                             <table>
-                                <thead>
-                                    <tr>
-                                        <th class="product_remove">Delete</th>
-                                        <th class="product_thumb">Image</th>
-                                        <th class="product_name">Product</th>
-                                        <th class="product-price">Price</th>
-                                        <th class="product_quantity">Quantity</th>
-                                        <th class="product_total">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach(var item in Model) { 
-                                    <tr>
-                                        <td class="product_remove">
-                                            <a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                        <td class="product_thumb"><a href="#"><img src="~/images/product/@Html.DisplayFor(modelItem => item.Product.Image)" alt=""></a></td>
-                                        <td class="product_name"><a href="#"></a>@Html.DisplayFor(modelItem => item.Product.Name)</td>
-                                        <td class="product-price">@Html.DisplayFor(modelItem => item.Product.Price)</td>
-                                        <td class="product_quantity"><input min="1" max="100" value="@Html.DisplayFor(modelItem => item.Quantity)" type="number"></td>
-                                        <td class="product_total">@Html.DisplayFor(modelItem => item.Total)</td>
-                                    </tr>
+                                @if (Model.Count() == 0)
+                                {
+                                    <tbody>
+                                        <tr>
+                                            <p class="text-center">Không có sản phẩm nào trong giỏ hàng</p>
+                                        </tr>
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th class="product_remove">Hình Ảnh</th>
+                                            <th class="product_thumb">Tên</th>
+                                            <th class="product_name">Giá</th>
+                                            <th class="product-price">Số lượng</th>
+                                            <th class="product_quantity">Tổng tiền</th>
+                                            <th class="product_total">Chỉnh sửa</th>
+                                            <th class="product_total">Xóa</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <form asp-action="UpdateToCart">
+                                                <td class="product_thumb"><a href="#"><img src="~/images/product/@Html.DisplayFor(modelItem => item.Product.Image)" alt=""></a></td>
+                                                <td class="product_name"><a href="#"></a>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+                                                <td class="product-price">@Html.DisplayFor(modelItem => item.Product.Price)</td>
+                                                <input type="hidden" name="id" value="@Html.DisplayFor(modelItem=>item.ProductId)" />
+                                                <td class="product_quantity"><input min="1" max="100" name="soluong" value="@Html.DisplayFor(modelItem => item.Quantity)" type="number">
+                                                @if (item.Product.Stock < item.Quantity)
+                                                {
+                                                    instock = false;
+                                                    <span class="text-red">Tồn Kho: @Html.DisplayFor(modolItem=>item.Product.Stock)</span>
+                                                }
+                                                </td>
+                                                <td class="product_total">@Html.DisplayFor(modelItem => item.Total)</td>
+                                                <td>
+                                                    <input class="btn btn-success" type="submit" value="Sửa">
+                                                </td>
+                                                <td class="product_remove">
+                                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash-o text-white"></i></a>
+                                                </td>
+                                            </form>
+                                            </tr>
+                                        }
+                                        </tbody>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="cart_submit">
-                            <button type="submit">update cart</button>
-                        </div>
+                                </table>
+                            </div>
                     </div>
                 </div>
             </div>
             <!--coupon code area start-->
             <div class="coupon_area">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="coupon_code left">
-                            <h3>Coupon</h3>
-                            <div class="coupon_inner">
-                                <p>Enter your coupon code if you have one.</p>
-                                <input placeholder="Coupon code" type="text">
-                                <button type="submit">Apply coupon</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-12 col-md-12">
                         <div class="coupon_code right">
-                            <h3>Cart Totals</h3>
+                            <h3>Tổng Tiền Giỏ Hàng của bạn</h3>
                             <div class="coupon_inner">
                                 <div class="cart_subtotal">
-                                    <p>Subtotal</p>
-                                    <p class="cart_amount">£215.00</p>
-                                </div>
-                                <div class="cart_subtotal ">
-                                    <p>Shipping</p>
-                                    <p class="cart_amount"><span>Flat Rate:</span> £255.00</p>
-                                </div>
-                                <a href="#">Calculate shipping</a>
-
-                                <div class="cart_subtotal">
-                                    <p>Total</p>
-                                    <p class="cart_amount">£215.00</p>
+                                    <p>Tổng tiền:</p>
+                                    <p class="cart_amount">@ViewData["Total"] <span>VND</span></p>
                                 </div>
                                 <div class="checkout_btn">
-                                    <a href="#">Proceed to Checkout</a>
+                                    @if (instock)
+                                        {
+                                            <a asp-action="Pay">Thanh toán</a>
+                                        }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--coupon code area end-->
-        </form>
     </div>
 </div>
 

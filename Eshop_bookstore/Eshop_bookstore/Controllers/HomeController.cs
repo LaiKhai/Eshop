@@ -86,18 +86,19 @@ namespace Eshop_Bookstore.Controllers
             var userLogin = ViewBag.UserLogin;
             if(userLogin != null)
             {
+                Account us = _context.Accounts.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
                 if (userLogin.IsAdmin)
                 {
                     HttpContext.Session.SetString("username", user.Username);
                     HttpContext.Session.SetString("password", user.Password);
-                    HttpContext.Session.SetString("IdAccount", user.Id.ToString());
+                    HttpContext.Session.SetInt32("UserID", us.Id);
                     return RedirectToAction("Home", "Admin");
                 }
                 else
                 {
                     HttpContext.Session.SetString("username", user.Username);
                     HttpContext.Session.SetString("password", user.Password);
-                    HttpContext.Session.SetString("IdAccount", user.Id.ToString());
+                    HttpContext.Session.SetInt32("UserID", us.Id);
                     return RedirectToAction("Index");
                 }
             }
