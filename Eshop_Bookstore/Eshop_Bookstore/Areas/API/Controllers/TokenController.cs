@@ -28,6 +28,7 @@ namespace Eshop_Bookstore.Areas.API.Controllers
             _context = eshop_Bookstore;
         }
 
+        [HttpPost]
         public async Task<IActionResult> Product(Account account)
         {
             if(account != null && account.Username != null && account.Password != null)

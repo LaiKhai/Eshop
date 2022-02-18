@@ -68,7 +68,7 @@ namespace Eshop_Bookstore.Controllers
             using (var httpClient = new HttpClient())
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PostAsync("https://localhost:44330/api/token", content))
+                using (var response = await httpClient.PostAsync("https://localhost:44347/api/token", content))
                 {
                     if(response.ReasonPhrase == "OK")
                     {
