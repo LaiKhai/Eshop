@@ -87,6 +87,7 @@ namespace Eshop_Bookstore.Controllers
                     }
                     account.Avatar = fileName;
                     _context.Update(account);
+                    
                     await _context.SaveChangesAsync();
                 }
                 return RedirectToAction("Index", "Home");
