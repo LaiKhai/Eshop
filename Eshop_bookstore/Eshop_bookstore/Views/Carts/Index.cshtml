@@ -53,7 +53,7 @@
                                         {
                                             <tr>
                                                 <form asp-action="UpdateToCart">
-                                                <td class="product_thumb"><a href="#"><img src="~/images/product/@Html.DisplayFor(modelItem => item.Product.Image)" alt=""></a></td>
+                                                <td class="product_thumb"><a href="#"><img src="~/EshopView/assets/img/product/@Html.DisplayFor(modelItem => item.Product.Image)" alt=""></a></td>
                                                 <td class="product_name"><a href="#"></a>@Html.DisplayFor(modelItem => item.Product.Name)</td>
                                                 <td class="product-price">@Html.DisplayFor(modelItem => item.Product.Price)</td>
                                                 <input type="hidden" name="id" value="@Html.DisplayFor(modelItem=>item.ProductId)" />
@@ -90,7 +90,7 @@
                             <div class="coupon_inner">
                                 <div class="cart_subtotal">
                                     <p>Tổng tiền:</p>
-                                    <p class="cart_amount">@ViewData["Total"] <span>VND</span></p>
+                                    <p class="cart_amount">@{var d = string.Format("{0:#,##0} VND", ViewData["Total"]); } @d </p>
                                 </div>
                                 <div class="checkout_btn">
                                     @if (instock)

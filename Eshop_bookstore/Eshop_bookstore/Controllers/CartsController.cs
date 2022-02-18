@@ -23,11 +23,12 @@ namespace Eshop_Bookstore.Controllers
 
         //Thêm giỏ hàng
         public async Task<IActionResult> AddToCart(int id, int quantity)
-        {
-            Cart giohang = _context.Carts.FirstOrDefault(gh => gh.ProductId == id);
+        {           
+
+            int UserId = (int)HttpContext.Session.GetInt32("UserID");
+            Cart giohang = _context.Carts.FirstOrDefault(gh => gh.ProductId == id && gh.AccountId == UserId);
             if (giohang == null)
-            {
-                int UserId = (int)HttpContext.Session.GetInt32("UserID");
+            {                
                 giohang = new Cart()
                 {
                     AccountId = UserId,
@@ -58,15 +59,15 @@ namespace Eshop_Bookstore.Controllers
             {
                 var userLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
                 ViewBag.UserLogin = userLogin;
-                ViewData["Total"] = _context.Carts.Sum(p => p.Quantity * p.Product.Price);
                 int UserId = (int)HttpContext.Session.GetInt32("UserID");
-                var sp = _context.Carts.Include(p => p.Product).Include(u => u.Account).Where(i => i.AccountId == UserId);
-                return View(await sp.ToListAsync());
+                ViewData["Total"] = _context.Carts.Where(p=> p.AccountId == UserId).Sum(p => p.Quantity * p.Product.Price);                
+                var sp = await _context.Carts.Include(p => p.Product).Include(u => u.Account).Where(i => i.AccountId == UserId).ToListAsync();
+                return View(sp);
             }
             else
             {
                 ViewBag.UserLogin = null;
-                return RedirectToAction("Login", "Home");
+                return RedirectToAction("Index", "Login");
             }
             //  End: Kiểm tra user xem đã đăng nhập chưa
             
@@ -299,7 +300,8 @@ namespace Eshop_Bookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateToCart(int id, int soluong)
         {
-            var sp = await _context.Carts.FirstOrDefaultAsync(p => p.ProductId == id);
+            int UserId = (int)HttpContext.Session.GetInt32("UserID");
+            var sp = await _context.Carts.FirstOrDefaultAsync(p => p.ProductId == id && p.AccountId == UserId);
             if (soluong > 0)
             {
                 sp.Quantity = soluong;

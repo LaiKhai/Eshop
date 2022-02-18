@@ -42,7 +42,7 @@ namespace Eshop_Bookstore.Controllers
             }
 
             ViewBag.lstProducts = await _context.Products.ToListAsync();
-
+            ViewBag.updateInfo = HttpContext.Session.GetInt32("updateInfo");
             return View();
         }
 
@@ -112,7 +112,8 @@ namespace Eshop_Bookstore.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            ViewBag.reFail = HttpContext.Session.GetInt32("reFail");
+            return View("Register");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

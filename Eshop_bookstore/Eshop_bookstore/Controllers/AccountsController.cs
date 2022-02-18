@@ -11,6 +11,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
+
 namespace Eshop_Bookstore.Controllers
 {
     public class AccountsController : Controller
@@ -63,15 +64,27 @@ namespace Eshop_Bookstore.Controllers
         {
             if (ModelState.IsValid)
             {
+                var a = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == account.Username);
                 //  Start Kiểm tra Username tồn tại hay chưa
-                var ac = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == account.Username);
-
-                if(ac != null)
+                if ( await _context.Accounts.FirstOrDefaultAsync(u => u.Username == account.Username) != null)
                 {
-                    //return RedirectToAction("Index", "Home");
-                    return Ok("Tài Khoản đã tồn tại");
+                    HttpContext.Session.SetInt32("reFail", 1);
+                    return RedirectToAction("Register", "Home");
                 }
-                //  End
+
+                //  Start Kiểm tra Email tồn tại hay chưa
+                if (await _context.Accounts.FirstOrDefaultAsync(u => u.Email == account.Email) != null)
+                {
+                    HttpContext.Session.SetInt32("reFail", 2);
+                    return RedirectToAction("Register", "Home");
+                }
+
+                //  Start Kiểm tra Phone tồn tại hay chưa
+                if (await _context.Accounts.FirstOrDefaultAsync(u => u.Phone == account.Phone) != null)
+                {
+                    HttpContext.Session.SetInt32("reFail", 3);
+                    return RedirectToAction("Register", "Home");
+                }
 
                 account.Status = true;
                 _context.Add(account);
@@ -87,10 +100,16 @@ namespace Eshop_Bookstore.Controllers
                         fs.Flush();
                     }
                     account.Avatar = fileName;
-                    _context.Update(account);
-                    
+                    _context.Update(account);                    
                     await _context.SaveChangesAsync();
                 }
+                else
+                {
+                    account.Avatar = "no-image.png";
+                    _context.Update(account);
+                    await _context.SaveChangesAsync();
+                }
+                HttpContext.Session.SetInt32("reFail", 0);
                 return RedirectToAction("Index", "Login");
             }
             return RedirectToAction("Create", "Accounts");
@@ -175,8 +194,13 @@ namespace Eshop_Bookstore.Controllers
                     }
                 }
                 //return RedirectToAction(nameof(Index));
+                HttpContext.Session.SetInt32("updateInfo", 1);
             }
-            
+            else
+            {
+                HttpContext.Session.SetInt32("updateInfo", 0);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 

@@ -20,6 +20,7 @@ namespace Eshop_Bookstore.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.reFail = HttpContext.Session.GetInt32("reFail");
             //return RedirectToAction("Index", "Login");
             return View();
         }
@@ -28,29 +29,11 @@ namespace Eshop_Bookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(Account user)
         {
-            //using (var httpClient = new HttpClient())
-            //{
-            //    StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-            //    using (var response = await httpClient.PostAsync("https://localhost:44347/api/token", content))
-            //    {
-            //        if (response.ReasonPhrase == "OK")
-            //        {
-            //            //  get user để kiểm tra đăng nhập
-            //            ViewBag.UserLogin = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == user.Password);
-
-            //            //  Get token
-            //            ViewBag.Token = HttpContext.Session.GetString("JWTToken");
-            //            //var a = HttpContext.Session.GetString("JWTToken");
-
-            //            string token = await response.Content.ReadAsStringAsync();
-            //            HttpContext.Session.SetString("JWTToken", token);
-            //        }
-            //    }
-            //}
             var userLogin =  await _context.Accounts.FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == user.Password);
             ViewBag.UserLogin = userLogin;
             if (userLogin != null)
             {
+                ViewBag.r = true;
                 Account us = _context.Accounts.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
                 if (userLogin.IsAdmin)
                 {
@@ -69,7 +52,9 @@ namespace Eshop_Bookstore.Controllers
             }
             else
             {
-                return Ok("Sai username hoặc password");
+                ViewBag.r = false;
+                //return Ok("Sai username hoặc password");
+                return View("Index");
             }
         }
 

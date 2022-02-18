@@ -1456,7 +1456,6 @@
     </div>
 </div>
 <!--testimonial area end-->
-
 <!--blog area start-->
 <section class="blog_section blog_five">
     <div class="container">
@@ -1596,3 +1595,13 @@
     </div>
 </div>
 <!--newsletter area end-->
+@section Scripts {
+    @if (ViewBag.updateInfo == 1)
+    {
+        <script>alert("Cập nhật thành công");</script>
+    }
+    else if (ViewBag.updateInfo == 0)
+    {
+        <script>alert("Cập nhật thất bại");</script>
+    }
+}
