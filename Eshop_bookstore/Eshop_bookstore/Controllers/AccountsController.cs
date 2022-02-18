@@ -68,7 +68,8 @@ namespace Eshop_Bookstore.Controllers
 
                 if(ac != null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
+                    return Ok("Tài Khoản đã tồn tại");
                 }
                 //  End
 
@@ -90,7 +91,7 @@ namespace Eshop_Bookstore.Controllers
                     
                     await _context.SaveChangesAsync();
                 }
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Login");
             }
             return RedirectToAction("Create", "Accounts");
         }

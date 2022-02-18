@@ -1,84 +1,123 @@
-﻿@model Eshop_Bookstore.Models.Account
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    ViewBag.Title = "Register";
+﻿@model Eshop_Bookstore.Models.Account;
+@{ 
+    Layout = "";
 }
-<div class="row justify-content-md-center">
-    <div class="col-md-5">
-        @*@using (Html.BeginForm("Register", "Home", FormMethod.Post))
-        {*@
-        <form asp-controller="Account" asp-action="Create" method="post" enctype="multipart/form-data">
-            <!-- Input and Submit elements -->
-            @Html.ValidationSummary()
-            @Html.AntiForgeryToken()
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login V4</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/js/vendor_register/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/fonts_register/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/fonts_register/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/js/vendor_register/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/js/vendor_register/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/js/vendor_register/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/js/vendor_register/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/js/vendor_register/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/css/register_main.css">
+    <link rel="stylesheet" type="text/css" href="~/EshopView/assets/css/register_util.css">
+    <!--===============================================================================================-->
+</head>
+<body>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Register</div>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.Username)
-                        @Html.TextBoxFor(m => m.Username, "", new { @class = "form-control", @placeholder = "User Name" })
-                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "badge badge-danger" })
-                    </div>
-                    <div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.Password)
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "badge badge-danger" })
-                    </div>
-                    <div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.Email)
-                        @Html.TextBoxFor(m => m.Email, "", new { @class = "form-control", @placeholder = "Email" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "badge badge-danger" })
-                        @if (ViewBag.error != null)
-                        {
-                            <span class="badge badge-danger">@ViewBag.error</span>
-                        }
-                    </div>
-                    <div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.Phone)
-                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @placeholder = "Phone" })
-                        @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "badge badge-danger" })
-                    </div>
-                    <div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.Address)
-                        @Html.TextBoxFor(m => m.Address, "", new { @class = "form-control", @placeholder = "Address" })
-                        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "badge badge-danger" })
-                    </div>
-                    <div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.FullName)
-                        @Html.TextBoxFor(m => m.FullName, "", new { @class = "form-control", @placeholder = "FullName" })
-                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "badge badge-danger" })
-                    </div>
-                    @*<div class="form-group">
-                        <br />
-                        @Html.LabelFor(m => m.IsAdmin)
-                        @Html.TextBoxFor(m => m.IsAdmin, "", new { @class = "form-control", @placeholder = "IsAdmin" })
-                        @Html.ValidationMessageFor(m => m.IsAdmin, "", new { @class = "badge badge-danger" })
-                    </div>*@
+    <div class="limiter">
+        <div class="container-login100" style="background-color: cornflowerblue">
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+                <form class="login100-form validate-form" asp-controller="Accounts" asp-action="Create" enctype="multipart/form-data">
+                    <span class="login100-form-title p-b-49">
+                        Register
+                    </span>
 
-
-                    @*<div class="form-group">
-            @Html.LabelFor(m => m.ConfirmPassword)
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confim Password" })
-            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "badge badge-danger" })
-        </div>*@
-                    <div class="form-group">
-                        <br />
-                        <input type="submit" name="submit" class="btn btn-danger" value="Register" />
+                    <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+                        <span class="label-input100">Username</span>
+                        <input class="input100" type="text" asp-for="Username" placeholder="Type your username">
                     </div>
-                </div>
+
+                    <div style="margin-bottom: 30px;" class="wrap-input100 validate-input" data-validate="Password is required">
+                        <span class="label-input100">Password</span>
+                        <input class="input100" type="password" asp-for="Password" placeholder="Type your password">
+                        <!-- <span class="focus-input100" data-symbol="&#xf190;"></span> -->
+                    </div>
+
+                    <div style="margin-bottom: 30px;" class="wrap-input100 validate-input " data-validate="Username is reauired">
+                        <span class="label-input100">Email</span>
+                        <input class="input100" type="email" asp-for="Email" placeholder="Type your email">
+                    </div>
+
+                    <div style="margin-bottom: 30px;" class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+                        <span class="label-input100">Phone</span>
+                        <input class="input100" type="text" asp-for="Phone" placeholder="Type your phone">
+                    </div>
+
+                    <div style="margin-bottom: 30px;" class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+                        <span class="label-input100">Address</span>
+                        <input class="input100" type="text" asp-for="Address" placeholder="Type your address">
+                    </div>
+
+                    <div style="margin-bottom: 30px;" class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+                        <span class="label-input100">FullName</span>
+                        <input class="input100" type="text" asp-for="FullName" placeholder="Type your fullname">
+                    </div>
+
+                     <div class="form-group">
+                        <label asp-for="AvatarFile" class="control-label"></label>
+                        <input asp-for="AvatarFile" class="form-control" />
+                        <img id="imgPreview" style="width:200px;"  />
+                        <span asp-validation-for="AvatarFile" class="text-danger"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <div class="wrap-login100-form-btn">
+                            <div class="login100-form-bgbtn"></div>
+                            <button class="login100-form-btn">
+                                Register
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-        @*  *@
+        </div>
     </div>
-</div>
+
+
+    <div id="dropDownSelect1"></div>
+   
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/vendor_register/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/vendor_register/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/vendor_register/bootstrap/js/popper.js"></script>
+    <script src="~/EshopView/assets/js/vendor_register/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/vendor_register/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/vendor_register/daterangepicker/moment.min.js"></script>
+    <script src="~/EshopView/assets/js/vendor_register/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/vendor_register/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/EshopView/assets/js/register.js"></script>
+     <script>
+    $(document).ready(function () {
+        $("#AvatarFile").on("change", function (e) {
+            var filePath = URL.createObjectURL(e.target.files[0]);
+            $("#imgPreview").show().attr("src",filePath);
+        })
+    });
+</script>
+</body>
+</html>

@@ -129,7 +129,7 @@ namespace Eshop_Bookstore.Controllers
         {
             HttpContext.Session.Clear(); // clear token
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Index","Login");
         }
 
 
